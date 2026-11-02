@@ -8042,6 +8042,13 @@ tu_CmdBeginRendering(VkCommandBuffer commandBuffer,
    cmd->state.suspending = suspending;
    cmd->state.resuming = resuming;
 
+   /* A chain still suspended at vkEndCommandBuffer() is rendered from a new
+    * command buffer by tu_insert_dynamic_cmdbufs(), which starts with no
+    * pending flushes, so emit the flushes of earlier barriers here.
+    */
+   if (suspending && !resuming)
+      tu_emit_cache_flush<CHIP>(cmd);
+
    if (!resuming && cmd->device->dbg_renderpass_stomp_cs) {
       tu_cs_emit_call(&cmd->cs, cmd->device->dbg_renderpass_stomp_cs);
       cmd->state.dirty |= TU_CMD_DIRTY_COMPUTE_DESC_SETS;
