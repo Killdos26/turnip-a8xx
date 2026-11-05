@@ -36,7 +36,10 @@ command line contains `Cyberpunk2077.exe`, or the string in `YF_TARGET`.
 
 ## Use (DroidDeck)
 
-1. Copy `yieldfix.sh` and `libyieldfix.so` to `/mnt/droiddeck-sd/`.
+1. Copy `yieldfix.sh` and `libyieldfix.so` into the SD card folder
+   `Android/data/com.antutu.benchmark.full/files/steam/`. Inside DroidDeck's
+   Linux guest that folder is `/mnt/droiddeck-sd/` (the path used below and
+   in the logs).
 2. Set the Steam launch options of the game:
 
    ```
@@ -98,7 +101,7 @@ The source of `libyieldfix.so` is not in this repository yet.
 같은 스레드가 200µs 안에 다시 `sched_yield`하면, 바로 넘기지 않고 `YF_SLEEP_US`(기본 50µs)만큼 잠들어요. 명령줄에 `Cyberpunk2077.exe`가 들어간 프로세스(또는 `YF_TARGET`에 적은 이름)에서만 동작해요.
 
 ### 쓰는 법 (DroidDeck)
-1. `yieldfix.sh`와 `libyieldfix.so`를 `/mnt/droiddeck-sd/`에 복사해요.
+1. `yieldfix.sh`와 `libyieldfix.so`를 SD카드의 `Android/data/com.antutu.benchmark.full/files/steam/` 폴더에 복사해요. 로그 경로로 보면 게스트 안에서는 `/mnt/droiddeck-sd/`로 보이는 곳이에요.
 2. 게임의 Steam 실행 옵션에 넣어요:
    ```
    sh /mnt/droiddeck-sd/yieldfix.sh %command%
