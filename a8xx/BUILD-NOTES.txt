@@ -302,3 +302,16 @@ r55
 - Android: Qualcomm gralloc buffers (swapchain / AHardwareBuffer) get the
   right UBWC-or-linear layout again on newer gralloc versions. Without this
   the picture was completely garbled in GameNative.
+
+r56
+- Two A8XX fixes imported from DroidDeck's DD-Turnip v0.4.0 (GPL-3.0):
+    tu: emit pending flushes where a suspended render pass chain starts
+        (by K11MCH1). vkd3d-proton splits render passes across command
+        buffers; the barrier waits before such a chain were dropped, so
+        indirect draws could read arguments before compute wrote them
+        (black / over-shadowed ground in UE5 games).
+    tu: reset the A8XX LRZ controls after the end-of-pass LRZ flush, so a
+        large fast-cleared LRZ buffer no longer hangs the GPU.
+- DD-Turnip v0.4.0 alone still lost the device after ~5 min in Cyberpunk
+  2077 on Adreno 830, so these do not replace TU_SAFEMODE; they target the
+  remaining glitches.

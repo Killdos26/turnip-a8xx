@@ -87,6 +87,20 @@ GitHub Actions (`.github/workflows/build.yml`) builds every push; pushing a tag
 Mesa's licenses apply (mostly MIT, see `docs/license.rst`). This repository
 contains no proprietary driver code.
 
+Some commits are imported from DroidDeck's
+[Droid-Deck/drivers](https://github.com/Droid-Deck/drivers) patch set, which is
+distributed under **GPL-3.0** ([text](https://github.com/kyudongkim/turnip-a8xx/blob/main/a8xx/LICENSES/GPL-3.0.txt)).
+Each such commit says so in its message (`Imported from Droid-Deck/drivers`).
+Builds that include them are therefore distributed under GPL-3.0 as a whole;
+the complete corresponding source is this repository at the release tag.
+
+| Imported change | Author |
+|---|---|
+| tu: emit pending flushes where a suspended render pass chain starts | K11MCH1 |
+| tu: reset the A8XX LRZ controls after the end-of-pass LRZ flush | Droid-Deck/drivers |
+
+일부 커밋은 DroidDeck의 Droid-Deck/drivers 패치 세트(GPL-3.0)에서 가져왔어요. 그 커밋이 들어간 빌드는 전체가 GPL-3.0으로 배포되고, 대응 소스는 릴리스 태그 시점의 이 레포예요.
+
 ---
 
 ## 한국어
