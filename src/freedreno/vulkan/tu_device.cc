@@ -2241,6 +2241,17 @@ tu_GetPhysicalDeviceMemoryProperties2(VkPhysicalDevice pdev,
             static_cast<VkPhysicalDeviceMemoryBudgetPropertiesEXT *>(ext);
          memory_budget_props->heapUsage[0] = p_atomic_read(&tu_process_heap_used);
          memory_budget_props->heapBudget[0] = tu_get_budget_memory(physical_device, memory_budget_props->heapUsage[0]);
+         for (unsigned s = 0; s < TU_BUDGET_SLOTS; s++) {
+            uintptr_t want = 0, me = (uintptr_t) physical_device;
+            if (tu_budget_stats[s].pdev.load() == me ||
+                tu_budget_stats[s].pdev.compare_exchange_strong(want, me)) {
+               tu_budget_stats[s].queries.fetch_add(1, std::memory_order_relaxed);
+               tu_budget_stats[s].usage.store(memory_budget_props->heapUsage[0], std::memory_order_relaxed);
+               tu_budget_stats[s].budget.store(memory_budget_props->heapBudget[0], std::memory_order_relaxed);
+               tu_budget_stats[s].heap.store(physical_device->heap.size, std::memory_order_relaxed);
+               break;
+            }
+         }
 
          /* The heapBudget and heapUsage values must be zero for array elements
           * greater than or equal to VkPhysicalDeviceMemoryProperties::memoryHeapCount

@@ -2755,6 +2755,17 @@ hanglog_thread(void *data)
                }
                fclose(f);
             }
+            for (unsigned s = 0; s < TU_BUDGET_SLOTS; s++) {
+               if (!tu_budget_stats[s].pdev.load(std::memory_order_relaxed))
+                  continue;
+               mesa_logw("TU_HANGLOG: t=%lld budget query #%u: %llu queries total | "
+                         "reported usage %llu MB budget %llu MB heap %llu MB",
+                         hanglog_wall_ms(), s,
+                         (unsigned long long) tu_budget_stats[s].queries.load(std::memory_order_relaxed),
+                         (unsigned long long) (tu_budget_stats[s].usage.load(std::memory_order_relaxed) >> 20),
+                         (unsigned long long) (tu_budget_stats[s].budget.load(std::memory_order_relaxed) >> 20),
+                         (unsigned long long) (tu_budget_stats[s].heap.load(std::memory_order_relaxed) >> 20));
+            }
             uint32_t subs = tu_stat_submits.exchange(0, std::memory_order_relaxed);
             uint32_t safe = tu_stat_submits_safe.exchange(0, std::memory_order_relaxed);
             mesa_logw("TU_HANGLOG: t=%lld mem gpu %lld MB (%lld bos) | rss %ld MB swap %ld MB | "

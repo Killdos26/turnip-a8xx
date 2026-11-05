@@ -171,6 +171,19 @@ extern std::atomic<uint32_t> tu_gmem_for_hits;
  * "3 faults in 2 s" context-invalidation limit.
  */
 extern std::atomic<int64_t> tu_safe_until_ns;
+
+/* VK_EXT_memory_budget queries, per physical device (in first-query order),
+ * for the TU_HANGLOG heartbeat: who asks, how often, and what was answered.
+ */
+#define TU_BUDGET_SLOTS 4
+struct tu_budget_stat {
+   std::atomic<uintptr_t> pdev;
+   std::atomic<uint64_t> queries;
+   std::atomic<uint64_t> usage;
+   std::atomic<uint64_t> budget;
+   std::atomic<uint64_t> heap;
+};
+extern struct tu_budget_stat tu_budget_stats[TU_BUDGET_SLOTS];
 static inline bool
 tu_safe_active(void)
 {
