@@ -82,6 +82,12 @@ GitHub Actions (`.github/workflows/build.yml`) builds every push; pushing a tag
   commits still carry upstream Mesa's workflow files.
 - Per-build notes: [`a8xx/BUILD-NOTES.txt`](https://github.com/kyudongkim/turnip-a8xx/blob/main/a8xx/BUILD-NOTES.txt).
 
+## Extras
+
+- [`extras/yieldfix`](https://github.com/kyudongkim/turnip-a8xx/tree/main/extras/yieldfix):
+  `LD_PRELOAD` library that cuts Cyberpunk 2077's busy-wait CPU time under
+  Proton + FEX (not part of the driver). 사이버펑크의 바쁜 대기 CPU를 줄이는 별도 도구예요.
+
 ## License
 
 Mesa's licenses apply (mostly MIT, see `docs/license.rst`). This repository
