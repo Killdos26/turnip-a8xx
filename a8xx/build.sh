@@ -213,8 +213,8 @@ EOF
 {
   "schemaVersion": 1,
   "name": "Turnip a8xx ${NAME}",
-  "description": "Mesa Turnip ${VERSION} with Adreno 8xx GPC-fault mitigations (${mitig}). github.com/kyudongkim/turnip-a8xx",
-  "author": "kyudongkim",
+  "description": "Mesa Turnip ${VERSION} with Adreno 8xx GPC-fault mitigations (${mitig}). github.com/Killdos26/turnip-a8xx",
+  "author": "Killdos26",
   "packageVersion": "1",
   "vendor": "Mesa",
   "driverVersion": "Vulkan 1.${vk_minor}.${vk_patch}",
