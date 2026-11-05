@@ -315,3 +315,12 @@ r56
 - DD-Turnip v0.4.0 alone still lost the device after ~5 min in Cyberpunk
   2077 on Adreno 830, so these do not replace TU_SAFEMODE; they target the
   remaining glitches.
+
+r57
+- The Vulkan memory budget now reports the memory used by the whole
+  process. Under Proton, DXGI (DXVK) and the game's D3D12 device
+  (vkd3d-proton) are separate Vulkan devices, so DXGI's
+  QueryVideoMemoryInfo saw almost no usage and the game never learned it
+  was over budget (about 4.5 GB of GPU memory with VRAM cap 2048 MB).
+  Combine with DroidDeck's VRAM cap and/or TU_HEAP_MB to give the game a
+  budget it can see itself exceeding.

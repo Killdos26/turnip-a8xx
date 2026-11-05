@@ -2189,6 +2189,15 @@ tu_get_system_heap_size(struct tu_physical_device *physical_device)
    return available_ram;
 }
 
+/* Memory allocated by every VkDevice in this process. Under Proton the
+ * game's D3D12 device (vkd3d-proton) and DXGI (DXVK) are separate Vulkan
+ * instances, so a per-physical-device count made DXGI's
+ * QueryVideoMemoryInfo report almost no usage: the game never saw that it
+ * was over budget. Report the process-wide usage instead (same idea as
+ * DroidDeck's DD-Turnip process_heap_usage patch).
+ */
+static uint64_t tu_process_heap_used;
+
 static inline VkDeviceSize
 tu_get_budget_memory(struct tu_physical_device *physical_device, uint64_t heap_used)
 {
@@ -2230,7 +2239,7 @@ tu_GetPhysicalDeviceMemoryProperties2(VkPhysicalDevice pdev,
       case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT: {
          VkPhysicalDeviceMemoryBudgetPropertiesEXT *memory_budget_props =
             static_cast<VkPhysicalDeviceMemoryBudgetPropertiesEXT *>(ext);
-         memory_budget_props->heapUsage[0] = p_atomic_read(&physical_device->heap.used);
+         memory_budget_props->heapUsage[0] = p_atomic_read(&tu_process_heap_used);
          memory_budget_props->heapBudget[0] = tu_get_budget_memory(physical_device, memory_budget_props->heapUsage[0]);
 
          /* The heapBudget and heapUsage values must be zero for array elements
@@ -3606,6 +3615,7 @@ tu_add_to_heap(struct tu_device *dev, struct tu_bo *bo)
       return vk_errorf(dev, VK_ERROR_OUT_OF_DEVICE_MEMORY,
                        "Out of heap memory");
    }
+   p_atomic_add(&tu_process_heap_used, bo->size);
    return VK_SUCCESS;
 }
 
@@ -3695,6 +3705,7 @@ _tu_destroy_memory(struct tu_device *device,
 {
    if (mem->bo) {
       p_atomic_add(&device->physical_device->heap.used, -mem->bo->size);
+      p_atomic_add(&tu_process_heap_used, -mem->bo->size);
       tu_bo_finish(device, mem->bo);
    }
 
