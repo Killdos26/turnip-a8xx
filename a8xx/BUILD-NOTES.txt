@@ -315,3 +315,5 @@ r56
 - DD-Turnip v0.4.0 alone still lost the device after ~5 min in Cyberpunk
   2077 on Adreno 830, so these do not replace TU_SAFEMODE; they target the
   remaining glitches.
+- Cyberpunk 2077 benchmark (720p native, same settings): r54 25.58 fps,
+  r56 25.52 fps, no context recovery in either; no measurable change there.
